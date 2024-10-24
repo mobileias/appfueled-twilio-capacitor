@@ -44,14 +44,20 @@ android {
 
 repositories {
     google()
-    mavenCentral()
+    mavenCentral()  // Required for Twilio SDK
 }
-
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':capacitor-android')
+
+    // AndroidX Libraries
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    
+    // Twilio Voice SDK
+    implementation 'com.twilio:voice-android:5.7.2'  // Add Twilio's latest SDK
+
+    // Testing dependencies
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
