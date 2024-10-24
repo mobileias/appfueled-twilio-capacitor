@@ -28,7 +28,7 @@ export class AppfueledTwilioCapacitorWeb extends WebPlugin implements AppfueledT
       this.device = new Device(token);  // Initialize the device with the token
 
       // Event listener for when the device is ready
-      this.device.on('ready', (device: Device) => {
+      this.device.on('ready', () => {
         this.sendLogToMainApp('Twilio device ready for incoming calls.');
       });
 
@@ -84,7 +84,7 @@ export class AppfueledTwilioCapacitorWeb extends WebPlugin implements AppfueledT
       this.device = new Device(token);  // Initialize the device with the token
 
       // Event listener for when the device is ready
-      this.device.on('ready', (device: Device) => {
+      this.device.on('ready', () => {
         this.sendLogToMainApp('Twilio device ready for outgoing calls.');
       });
 

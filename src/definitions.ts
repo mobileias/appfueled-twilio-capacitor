@@ -11,8 +11,8 @@ export interface AppfueledTwilioCapacitorPlugin {
   // Method to reject an incoming call
   rejectIncomingCallConnection(): Promise<void>;
 
-  // Method to initiate an outgoing call
-  startOutgoingCallConnection(options: { phoneNumber: string }): Promise<void>;
+  // Method to initiate an outgoing call with phoneNumber and dynamic options
+  startOutgoingCallConnection(options: { phoneNumber: string, options: { [key: string]: any } }): Promise<void>;
 
   // Method to terminate an outgoing call
   terminateOutgoingCallConnection(): Promise<void>;

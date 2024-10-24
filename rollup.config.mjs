@@ -7,6 +7,7 @@ export default {
       name: 'capacitorAppfueledTwilioCapacitor',
       globals: {
         '@capacitor/core': 'capacitorExports',
+        '@twilio/voice-sdk': 'TwilioVoiceSDK',  // Specify Twilio Voice SDK as global variable
       },
       sourcemap: true,
       inlineDynamicImports: true,
@@ -18,5 +19,5 @@ export default {
       inlineDynamicImports: true,
     },
   ],
-  external: ['@capacitor/core'],
+  external: ['@capacitor/core', '@twilio/voice-sdk'],  // Treat Twilio Voice SDK as external
 };
