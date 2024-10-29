@@ -16,4 +16,7 @@ export interface AppfueledTwilioCapacitorPlugin {
 
   // Method to terminate an outgoing call
   terminateOutgoingCallConnection(): Promise<void>;
+
+  // New method to toggle speaker on or off
+  toggleSpeaker(options: { enable: boolean }): Promise<void>;
 }

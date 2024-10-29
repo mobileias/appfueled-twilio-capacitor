@@ -1,5 +1,7 @@
 package com.appfueled.twilio;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.util.Log;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,6 +20,7 @@ public class AppfueledTwilioCapacitor {
     private Call incomingCallConnection = null;  // Incoming call connection
     private Call outgoingCallConnection = null;  // Outgoing call connection
     private boolean isCallActive = false;  // Tracks if a call is active
+    private AudioManager audioManager;
 
     // Method to register the device with Twilio Voice SDK for handling incoming calls
     public void registerIncomingCallConnection(PluginCall call) {
@@ -209,5 +212,50 @@ public class AppfueledTwilioCapacitor {
     private void sendErrorToMainApp(String error) {
         Log.e("AppfueledTwilio", error);
         // You can call Capacitor methods to send this error to the frontend (e.g., using Capacitor.Events)
+    }
+
+    // Constructor to initialize AudioManager
+    public AppfueledTwilioCapacitor(Context context) {
+        audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+    }
+
+    // Method to toggle the speaker on or off
+    public void toggleSpeaker(PluginCall call) {
+        boolean enable = call.getBoolean("enable", false);
+        if (audioManager != null) {
+            audioManager.setSpeakerphoneOn(enable);
+            if (enable) {
+                audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
+            } else {
+                audioManager.setMode(AudioManager.MODE_NORMAL);
+            }
+            sendLogToMainApp("Speakerphone " + (enable ? "enabled" : "disabled"));
+            resolveOnMainThread(call);
+        } else {
+            sendErrorToMainApp("AudioManager not initialized");
+            rejectOnMainThread(call, "AudioManager not initialized");
+        }
+    }
+
+    // Helper method to resolve PluginCall on the main thread
+    private void resolveOnMainThread(PluginCall call) {
+        new Handler(Looper.getMainLooper()).post(call::resolve);
+    }
+
+    // Helper method to reject PluginCall on the main thread
+    private void rejectOnMainThread(PluginCall call, String message) {
+        new Handler(Looper.getMainLooper()).post(() -> call.reject(message));
+    }
+
+    // Helper method to send log messages to the Capacitor main app
+    private void sendLogToMainApp(String message) {
+        Log.i("AppfueledTwilio", message);
+        // Optionally, use Capacitor.Events to send logs to the frontend
+    }
+
+    // Helper method to send error messages to the Capacitor main app
+    private void sendErrorToMainApp(String error) {
+        Log.e("AppfueledTwilio", error);
+        // Optionally, use Capacitor.Events to send errors to the frontend
     }
 }

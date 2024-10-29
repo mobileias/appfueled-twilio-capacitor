@@ -7,6 +7,7 @@ export class AppfueledTwilioCapacitorWeb extends WebPlugin implements AppfueledT
   private incomingCallConnection: any = null;  // Incoming call connection
   private outgoingCallConnection: any = null;  // Outgoing call connection
   private device: Device | null = null;  // Twilio Device instance
+  private audioElement: HTMLAudioElement = new Audio();  // Audio element for speaker control
 
   // Helper function to send logs to the main Capacitor app
   private sendLogToMainApp(message: string) {
@@ -18,6 +19,13 @@ export class AppfueledTwilioCapacitorWeb extends WebPlugin implements AppfueledT
   private sendErrorToMainApp(error: string) {
     console.error(error);
     this.notifyListeners('error', { error });
+  }
+
+  // Method to toggle the speaker by adjusting volume
+  async toggleSpeaker(options: { enable: boolean }): Promise<void> {
+    const { enable } = options;
+    this.audioElement.volume = enable ? 1.0 : 0.5;  // Simulate speaker on/off by volume adjustment
+    this.sendLogToMainApp(`Speaker ${enable ? 'enabled' : 'disabled'}`);
   }
 
   // Method to register the Twilio device for handling incoming calls
